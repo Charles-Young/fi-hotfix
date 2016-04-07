@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Temp Fi Fix</string>
+    <string name="action_settings">Settings</string>
+    <string name="sprint">Force jump to Sprint</string>
+    <string name="tmobile">Force jump to T-Mobile</string>
+    <string name="nextcarrier">Force jump to next carrier</string>
+    <string name="autoswitch">Re-enable auto switching</string>
+    <string name="repair">Preform automated repair</string>
+    <string name="cellinfo">Current Network Info</string>
+</resources>
