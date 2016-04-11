@@ -2,11 +2,13 @@ package cay.tempfifix;
 
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private class RootCheck extends AsyncTask<Void, Void, Void> {
+    private class RootCheck extends AsyncTask<Void, Boolean, Boolean> {
         ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         @Override
         protected void onPreExecute() {
@@ -62,14 +64,27 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.show();
         }
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             // Shell.SU.available is a blocking call and thus should be run on a async task
-            Shell.SU.available();
-            return null;
+            return Shell.SU.available();
         }
-        @Override
-        protected void onPostExecute(Void Result) {
-            progressDialog.hide();
+        protected void onPostExecute(Boolean hasRoot) {
+            if (hasRoot){
+                progressDialog.dismiss();
+            } else {
+                progressDialog.dismiss();
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("Root Check Failed");
+                alertDialog.setMessage("This application requires root in order to function.");
+                alertDialog.setCancelable(false);
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Close",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                System.exit(0);
+                            }
+                        });
+                alertDialog.show();
+            }
         }
     }
     public void jumpSprint(View v) {
